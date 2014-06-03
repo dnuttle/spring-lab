@@ -1,0 +1,46 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+  <!-- A simple bean with a constructor argument; scope defaults to singleton -->
+  <bean id="name" class="net.nuttle.spring.beans.NameBean">
+    <constructor-arg type="java.lang.String" index="0">
+      <value>The name value</value>
+    </constructor-arg>
+  </bean>
+  
+  <bean id="name-two-constructor-args" class="net.nuttle.spring.beans.NameBean">
+    <constructor-arg type="java.lang.String" index="0">
+      <value>The name value</value>
+    </constructor-arg>
+    <constructor-arg type="java.lang.String" index="1">
+      <value>ID10001</value>
+    </constructor-arg>
+  </bean>
+
+  <!-- A simple bean with a property; scope is set to prototype -->
+  <bean id="address" class="net.nuttle.spring.beans.AddressBean" scope="prototype">
+    <property name="address" value="An address"/>
+  </bean>
+  
+  <!-- A bean definition with no constructor args (invalid) -->
+  <bean id="name-no-constructor-args" class="net.nuttle.spring.beans.NameBean" lazy-init="true"/>
+  
+  <!-- A bean definition with too many constructor args -->
+  <bean id="name-too-many-constructor-args" class="net.nuttle.spring.beans.NameBean" lazy-init="true">
+    <constructor-arg type="java.lang.String" index="0">
+      <value>This is the constructor value</value>
+    </constructor-arg>
+    <constructor-arg type="int" index="1">
+      <value>1</value>
+    </constructor-arg>
+  </bean>
+  
+  <!--  A bean definition with an invalid property name -->
+  <bean id="name-invalid-property" class="net.nuttle.spring.beans.NameBean" lazy-init="true">
+    <constructor-arg type="java.lang.String" index="0">
+      <value>This is the constructor value</value>
+    </constructor-arg>
+    <property name="notexist" value="some value"/>
+  </bean>
+</beans>
