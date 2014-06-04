@@ -66,4 +66,10 @@
     <property name="address" ref="address"/>
   </bean>
   
+  <bean id="name-factory" class="net.nuttle.spring.beans.NameBeanFactory" factory-method="getNameBean"/>
+  
+  <bean id="name-factory-2" class="net.nuttle.spring.beans.NameBeanFactory" factory-method="getNameBean">
+      <constructor-arg value="factory name"/>
+  </bean>
+  
 </beans>
