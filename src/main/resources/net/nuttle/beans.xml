@@ -2,6 +2,20 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
+  <!-- note that if you import another bean file, its path is relative to this bean file,
+  not to the application as a whole.
+  You could have one "master" bean file at the top of the classpath, and it might load various bean files further down
+  in the tree.  Although that could be confusing.
+   -->
+  <import resource="more-beans.xml"/>
+
+  <!-- A not about bean scope
+  By default, the scope for a bean is singleton.  This is to be preferred whenever a bean is stateless.
+  If it is not stateless, then it should have a scope of prototype.
+  Note that if the class attribute of a bean refers to a factory with a static factory method,
+  then its scope should be singleton, although its factory method is free to prototype beans. 
+   -->
+
   <!-- A simple bean with a constructor argument; scope defaults to singleton -->
   <bean id="name" class="net.nuttle.spring.beans.NameBean">
     <constructor-arg type="java.lang.String" index="0">
@@ -24,7 +38,7 @@
   </bean>
   
   <!-- A bean definition with no constructor args (invalid) -->
-  <bean id="name-no-constructor-args" class="net.nuttle.spring.beans.NameBean" lazy-init="true"/>
+  <bean id="name-no-constructor-args" class="net.nuttle.spring.beans.NameBean" lazy-init="true" scope="singleton"/>
   
   <!-- A bean definition with too many constructor args -->
   <bean id="name-too-many-constructor-args" class="net.nuttle.spring.beans.NameBean" lazy-init="true">
@@ -36,11 +50,20 @@
     </constructor-arg>
   </bean>
   
-  <!--  A bean definition with an invalid property name -->
-  <bean id="name-invalid-property" class="net.nuttle.spring.beans.NameBean" lazy-init="true">
+  <!-- A bean definition with an invalid property name -->
+  <!-- Note that there is no need to use lazy-init=true to prevent an error from occurring at context startup,
+  because scope of prototype means lazy instantiation by default. -->
+  <bean id="name-invalid-property" class="net.nuttle.spring.beans.NameBean" scope="prototype">
     <constructor-arg type="java.lang.String" index="0">
       <value>This is the constructor value</value>
     </constructor-arg>
     <property name="notexist" value="some value"/>
   </bean>
+  
+  <!-- A bean definition with a ref to another bean -->
+  <bean id="name-with-address" class="net.nuttle.spring.beans.NameBean" scope="prototype">
+    <constructor-arg value="A name bean"></constructor-arg>
+    <property name="address" ref="address"/>
+  </bean>
+  
 </beans>

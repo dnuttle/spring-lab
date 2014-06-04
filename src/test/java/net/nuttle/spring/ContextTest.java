@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 /**
- *
+ * Some unit tests for Spring contexts
  */
 public class ContextTest {
   
@@ -84,5 +84,11 @@ public class ContextTest {
     NameBean name = (NameBean)context.getBean("name-two-constructor-args");
     assertEquals(name.getId(), "ID10001");
     assertEquals(name.getName(), "The name value");
+  }
+  
+  @Test
+  public void testBeanWithRef() {
+    NameBean name = (NameBean)context.getBean("name-with-address");
+    assertEquals(name.getAddress().getAddress(), "An address");
   }
 }
