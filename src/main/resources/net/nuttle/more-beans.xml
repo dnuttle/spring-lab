@@ -6,4 +6,6 @@
     <constructor-arg value="Name" type="java.lang.String"/>
   </bean>
   
+  <alias name="yet-another-name" alias="yet-another-alias"/>
+  
 </beans>

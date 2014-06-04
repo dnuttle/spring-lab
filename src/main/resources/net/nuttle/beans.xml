@@ -1,6 +1,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd"
+  xmlns:p="http://www.springframework.org/schema/p">
 
   <!-- note that if you import another bean file, its path is relative to this bean file,
   not to the application as a whole.
@@ -9,7 +10,7 @@
    -->
   <import resource="more-beans.xml"/>
 
-  <!-- A not about bean scope
+  <!-- A note about bean scope
   By default, the scope for a bean is singleton.  This is to be preferred whenever a bean is stateless.
   If it is not stateless, then it should have a scope of prototype.
   Note that if the class attribute of a bean refers to a factory with a static factory method,
@@ -35,6 +36,11 @@
   <!-- A simple bean with a property; scope is set to prototype -->
   <bean id="address" class="net.nuttle.spring.beans.AddressBean" scope="prototype">
     <property name="address" value="An address"/>
+  </bean>
+  
+  <!-- A simple bean with a property defined using p namespace -->
+  <bean id="address2" class="net.nuttle.spring.beans.AddressBean" scope="prototype"
+      p:address="101 Main">
   </bean>
   
   <!-- A bean definition with no constructor args (invalid) -->
@@ -63,7 +69,67 @@
   <!-- A bean definition with a ref to another bean -->
   <bean id="name-with-address" class="net.nuttle.spring.beans.NameBean" scope="prototype">
     <constructor-arg value="A name bean"></constructor-arg>
-    <property name="address" ref="address"/>
+    <property name="address">
+        <!-- local attribute means that bean "address" is in this same xml file
+        otherwise, use bean attribute.  -->
+        <ref local="address"/>
+    </property>
   </bean>
   
+  <!-- A bean definition with an inner (unnamed) bean -->
+  <bean id="name-with-inner" class="net.nuttle.spring.beans.NameBean" scope="prototype">
+      <constructor-arg value="A bean with an inner bean"/>
+      <property name="address">
+          <bean class="net.nuttle.spring.beans.AddressBean" scope="prototype">
+              <property name="address" value="inner bean address"/>
+          </bean>
+      </property>
+  </bean>
+        
+  <bean id="name-factory" class="net.nuttle.spring.beans.NameBeanFactory" factory-method="getNameBean"/>
+  
+  <bean id="name-factory-2" class="net.nuttle.spring.beans.NameBeanFactory" factory-method="getNameBean">
+      <constructor-arg value="factory name"/>
+  </bean>
+  
+  <!-- Bean that has a non-static factory method -->
+  <!-- If class has more than one factory method, define a bean with unique id for each -->
+  <bean id="non-static-name-factory" class="net.nuttle.spring.beans.NameBeanFactory"/>
+  
+  <!-- Bean that uses non-static factory bean -->
+  <bean id="non-static-name" factory-bean="non-static-name-factory" factory-method="getNameBean2">
+      <constructor-arg value="Non static factory name"/>
+  </bean>
+  
+  <!-- A bean that loads properties from a properties file 
+  Note that, unlike importing another bean xml file, the path for the property file
+  is not relative to this file -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      <property name="location" value="net/nuttle/settings.properties"/>
+  </bean>
+  
+  <!-- A bean that gets a value from the properties file bean -->
+  <bean id="address-property-file" class="net.nuttle.spring.beans.AddressBean" p:address="${home.address}"/>
+  
+  <!-- Properties can also be embedded directly into this file -->
+  <bean id="mappings" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      <property name="properties">
+          <value>
+              prop1=value1
+              prop2=value2
+          </value>
+      </property>
+  </bean>
+  
+  <!-- Bean with list of values -->
+  <bean id="name-with-list" class="net.nuttle.spring.beans.NameBean">
+      <constructor-arg value="name-with-list"/>
+      <property name="listValues">
+          <list>
+              <value>First value</value>
+              <value>Second value</value>
+              <value>Third value</value>
+          </list>
+      </property>
+  </bean>
 </beans>
