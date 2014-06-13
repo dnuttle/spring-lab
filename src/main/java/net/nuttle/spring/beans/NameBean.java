@@ -1,6 +1,9 @@
 package net.nuttle.spring.beans;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  *
@@ -11,7 +14,11 @@ public class NameBean {
   private String id;
   private AddressBean address;
   private List<?> listValues;
-  
+  private Map<String,Integer> mapValues;
+  private Set<?> setValues;
+  private Properties props;
+  private StringBean stringBean;
+
   public NameBean(String name) {
     this.name = name;
   }
@@ -48,5 +55,38 @@ public class NameBean {
   public List<?> getListValues() {
     return listValues;
   }
+  
+  public void setMapValues(Map<String,Integer> values) {
+    mapValues = values;
+  }
+  
+  public Map<String,Integer> getMapValues() {
+    return mapValues;
+  }
+  
+  public void setSetValues(Set<?> values) {
+    setValues= values;
+  }
+  
+  public Set<?> getSetValues() {
+    return setValues;
+  }
+  
+  public void setProperties(Properties props) {
+    this.props = props;
+  }
+
+  public String getProperty(String key) {
+    return props.getProperty(key);
+  }
+  
+  public void setStringBean(StringBean stringBean) {
+    this.stringBean = stringBean;
+  }
+  
+  public StringBean getStringBean() {
+    return stringBean;
+  }
 
 }
+

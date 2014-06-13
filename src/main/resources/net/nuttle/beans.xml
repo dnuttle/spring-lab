@@ -122,7 +122,7 @@
   </bean>
   
   <!-- Bean with list of values -->
-  <bean id="name-with-list" class="net.nuttle.spring.beans.NameBean">
+  <bean id="name-with-list" class="net.nuttle.spring.beans.NameBean" scope="prototype">
       <constructor-arg value="name-with-list"/>
       <property name="listValues">
           <list>
@@ -131,5 +131,92 @@
               <value>Third value</value>
           </list>
       </property>
+  </bean>
+  
+  <!-- Bean with map -->
+  <bean id="name-with-map" class="net.nuttle.spring.beans.NameBean" scope="prototype">
+      <constructor-arg value="name-with-map"/>
+      <property name="mapValues">
+          <map>
+              <entry key="a" value="1"/>
+              <entry key="b" value="2"/>
+          </map>
+      </property>
+  </bean>
+  
+  <!-- Bean with map in which one value is of wrong type -->
+  <bean id="name-with-bad-map" class="net.nuttle.spring.beans.NameBean" scope="prototype">
+      <constructor-arg value="name-with-map"/>
+      <property name="mapValues">
+          <map>
+              <entry key="a" value="a"/>
+              <entry key="b" value="2"/>
+          </map>
+      </property>
+  </bean>
+  
+  <!--  Bean with set -->
+  <bean id="name-with-set" class="net.nuttle.spring.beans.NameBean" scope="prototype">
+      <constructor-arg value="name"/>
+      <property name="setValues">
+          <set>
+              <value>one</value>
+              <value>two</value>
+          </set>
+      </property>
+  </bean>
+  
+  <!-- Bean with properties -->
+  <bean id="name-with-props" class="net.nuttle.spring.beans.NameBean" scope="prototype">
+      <constructor-arg value="name"/>
+      <property name="properties">
+          <props>
+              <prop key="name">Lebowski</prop>
+              <prop key="rug">Persian</prop>
+          </props>
+      </property>
+  </bean>
+  
+  <!-- Bean with null value -->
+  <bean id="name-with-null" class="net.nuttle.spring.beans.NameBean" scope="prototype">
+      <constructor-arg><null/></constructor-arg>
+  </bean>
+  
+  <!-- Bean with merged values -->
+  <!-- It's possible to merge maps, lists, sets and properties. -->
+  <bean id="name-with-parent-map" class="net.nuttle.spring.beans.NameBean" scope="prototype">
+      <constructor-arg value="name"/>
+      <property name="mapValues">
+          <map>
+	          <entry key="one" value="1"/>
+	          <entry key="two" value="1"/>
+          </map>
+      </property>
+  </bean>
+  
+  <!-- This bean's map merges into the one in name-with-merged-map -->
+  <bean id="name-with-merged-map" parent="name-with-parent-map" class="net.nuttle.spring.beans.NameBean" scope="prototype">
+      <constructor-arg value="child"/>
+      <property name="mapValues">
+          <map merge="true">
+              <entry key="one" value="2"/>
+              <entry key="three" value="2"/>
+          </map>
+      </property>
+  </bean>
+  
+  <!-- A bean that is autowired to another bean -->
+  <bean id="stringBean" class="net.nuttle.spring.beans.StringBean" scope="prototype">
+      <property name="string" value="ABCD"/>
+  </bean>
+  
+  <!-- A bean that autowires another bean by name -->
+  <bean id="name-autowire-by-name" class="net.nuttle.spring.beans.NameBean" autowire="byName" scope="prototype">
+      <constructor-arg value="name"/>
+  </bean>
+  
+  <!-- A bean that autowires another bean by type -->
+  <bean id="name-autowire-by-type" class="net.nuttle.spring.beans.NameBean" autowire="byType" scope="prototype">
+      <constructor-arg value="name"/>
   </bean>
 </beans>
